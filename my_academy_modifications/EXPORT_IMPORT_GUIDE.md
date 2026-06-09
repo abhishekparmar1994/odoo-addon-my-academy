@@ -9,8 +9,8 @@ This guide explains how to export the **My Academy Webmyne** (`my_academy_modifi
 Since an Odoo addon is just a directory containing Python files, XML views, and configuration, exporting it is simple:
 
 1. **Locate the Addon Folder**:
-   Go to your `custom_addons` directory in this Odoo installation:
-   * Path: `c:\laragon\www\odoo\custom_addons\my_academy_modifications`
+   Go to the root directory in this Odoo installation:
+   * Path: `c:\laragon\www\odoo\my_academy_modifications`
 
 2. **Package the Folder**:
    * Right-click the `my_academy_modifications` folder and select **Compress to ZIP file** (or use any archiving tool like 7-Zip).
