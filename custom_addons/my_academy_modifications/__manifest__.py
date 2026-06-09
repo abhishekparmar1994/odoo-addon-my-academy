@@ -26,7 +26,7 @@
     },
     'installable': True,
     'application': False,
-    'price': 10,
+    'price': '',
     'currency': 'USD',
     'license': 'OPL-1',
     # Changed 'license' to 'OPL-1': Changing the license from 'LGPL-3' (open source) to 'OPL-1' (Odoo Proprietary License v1.0) is a mandatory requirement by Odoo to sell proprietary/paid modules. 
