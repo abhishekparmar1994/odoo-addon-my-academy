@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="survey_survey_view_form_inherit_certificate" model="ir.ui.view">
+        <field name="name">survey.survey.view.form.inherit.certificate</field>
+        <field name="model">survey.survey</field>
+        <field name="inherit_id" ref="survey.survey_survey_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='certification_mail_template_id']" position="after">
+                <field name="certificate_is_free" invisible="not certification"/>
+                <field name="certificate_product_id" 
+                       invisible="not certification or certificate_is_free" 
+                       domain="[('type', '=', 'service')]"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

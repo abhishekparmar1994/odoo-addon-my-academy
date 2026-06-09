@@ -1,0 +1,39 @@
+# Python bytecode and cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.pytest_cache/
+.coverage
+htmlcov/
+.mypy_cache/
+
+# Virtual Environment
+venv/
+.venv/
+env/
+ENV/
+
+# Odoo Core Server code (untracked, run locally)
+server/
+
+# Local Configurations & Startup Scripts
+# *.conf
+# odoo.conf
+# start.bat
+# help.txt
+scratch/
+
+# IDEs and Editors
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+
+# OS generated files
+.DS_Store
+Thumbs.db
+desktop.ini

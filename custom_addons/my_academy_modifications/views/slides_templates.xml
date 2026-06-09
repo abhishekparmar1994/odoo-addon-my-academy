@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--
+        Purpose : Override the website_slides_survey certification slide template.
+        Adds two layers of gating:
+          1. Lesson-completion lock  — shown when uncompleted lessons still exist.
+          2. "Download Certificate"  — shown when all lessons are done (quiz may be passed/pending).
+        Dependencies: website_slides_survey.slide_content_detailed
+    -->
+    <template id="slide_content_detailed_inherit" inherit_id="website_slides_survey.slide_content_detailed">
+        <xpath expr="//div[a[@id='start_certification']]" position="replace">
+            <t t-set="uncompleted_lessons" t-value="slide.get_uncompleted_lessons()"/>
+
+            <t t-if="uncompleted_lessons">
+                <!-- ===== GATE 1: Lessons not finished yet ===== -->
+                <div class="col-12 mt-4 mb-4">
+                    <div class="card border-0 shadow mx-auto"
+                         style="max-width:650px; border-radius:16px; overflow:hidden; background:#fff;">
+
+                        <div class="card-header d-flex align-items-center py-3 px-4"
+                             style="background:linear-gradient(135deg,#e05252,#f27474); border:none;">
+                            <div class="rounded-circle d-flex align-items-center justify-content-center bg-white text-danger shadow-sm me-3"
+                                 style="width:44px; height:44px;">
+                                <i class="fa fa-lock" style="font-size:20px;"/>
+                            </div>
+                            <div>
+                                <h5 class="card-title text-white mb-0"
+                                    style="font-weight:700; letter-spacing:0.3px;">Certification Locked</h5>
+                                <span class="text-white-50"
+                                      style="font-size:12px; font-weight:500;">Complete all lessons first</span>
+                            </div>
+                        </div>
+
+                        <div class="card-body p-4 text-start">
+                            <p class="text-muted mb-4" style="font-size:14px; line-height:1.6;">
+                                You must finish every lesson in this course before unlocking the
+                                certification exam. Please study the remaining lessons below:
+                            </p>
+                            <div class="list-group rounded-3 shadow-sm border-0"
+                                 style="background:#f8f9fa;"> 
+                                <t t-foreach="uncompleted_lessons" t-as="ucslide">
+                                    <div class="list-group-item d-flex align-items-center justify-content-between py-3 px-4 bg-transparent border-bottom"
+                                         style="border-color:rgba(0,0,0,0.06) !important;">
+                                        <div class="d-flex align-items-center">
+                                            <span class="d-flex align-items-center justify-content-center rounded-circle me-3"
+                                                  style="width:28px; height:28px; background:rgba(224,82,82,0.1); color:#e05252;">
+                                                <i class="fa fa-play" style="font-size:10px; margin-left:2px;"/>
+                                            </span>
+                                            <span class="text-dark" style="font-weight:600; font-size:14px;">
+                                                <t t-out="ucslide.name"/>
+                                            </span>
+                                        </div>
+                                        <a t-att-href="'/slides/slide/%s' % slug(ucslide)"
+                                           class="btn btn-sm px-3 shadow-sm"
+                                           style="border-radius:30px; font-size:12px; font-weight:600; padding:6px 16px; background:#6c7a89; color:#fff; border:none;">
+                                            Study Now <i class="fa fa-chevron-right ms-1" style="font-size:9px;"/>
+                                        </a>
+                                    </div>
+                                </t>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </t>
+
+            <t t-else="">
+                <!-- ===== GATE 2: All lessons done — show quiz + paid download ===== -->
+                <div class="col-12 mt-4 mb-4">
+                    <div class="card border-0 shadow mx-auto"
+                         style="max-width:650px; border-radius:16px; overflow:hidden; background:#fff;">
+
+                        <div class="card-header d-flex align-items-center py-3 px-4"
+                             style="background:linear-gradient(135deg,#1a73e8,#0d47a1); border:none;">
+                            <div class="rounded-circle d-flex align-items-center justify-content-center bg-white shadow-sm me-3"
+                                 style="width:44px; height:44px; color:#1a73e8;">
+                                <i class="fa fa-graduation-cap" style="font-size:20px;"/>
+                            </div>
+                            <div>
+                                <h5 class="card-title text-white mb-0"
+                                    style="font-weight:700; letter-spacing:0.3px;">Certification Exam</h5>
+                                <span class="text-white-50"
+                                      style="font-size:12px; font-weight:500;">All lessons completed ✓</span>
+                            </div>
+                        </div>
+
+                        <div class="card-body p-4 text-center">
+
+                            <!-- Step 1: Take the quiz -->
+                            <p class="text-muted mb-4" style="font-size:14px; line-height:1.6;">
+                                You have completed all course lessons. Take the certification exam and,
+                                once you pass, download your official certificate.
+                            </p>
+
+                            <a role="button"
+                               id="start_certification"
+                               t-att-href="'/slides_survey/slide/get_certification_url?slide_id=%s' % slide.id"
+                               target="_blank"
+                               class="btn btn-lg px-5 py-3 mb-3 d-block"
+                               style="border-radius:50px; font-weight:700; font-size:16px;
+                                      background:linear-gradient(135deg,#1a73e8,#0d47a1);
+                                      color:#fff; border:none;
+                                      box-shadow:0 4px 15px rgba(26,115,232,0.35);
+                                      transition:all 0.3s;">
+                                <i class="fa fa-fw fa-pencil me-2" role="img"/>
+                                <t t-if="slide.channel_id.is_member and slide.channel_id.active">
+                                    Begin Certification Exam
+                                </t>
+                                <t t-else="">Preview Certification</t>
+                            </a>
+
+                            <!-- Divider -->
+                            <div class="d-flex align-items-center my-3">
+                                <hr class="flex-grow-1" style="border-color:rgba(0,0,0,0.1);"/>
+                                <span class="px-3 text-muted" style="font-size:12px; white-space:nowrap;">After passing</span>
+                                <hr class="flex-grow-1" style="border-color:rgba(0,0,0,0.1);"/>
+                            </div>
+
+                            <!-- Step 2: Download (paid) -->
+                            <a role="button"
+                               id="download_certificate"
+                               t-att-href="'/survey/%s/get_certification' % (slide.survey_id.id if slide.survey_id else 0)"
+                               class="btn btn-lg px-5 py-3 d-block"
+                               style="border-radius:50px; font-weight:700; font-size:16px;
+                                      background:linear-gradient(135deg,#43a047,#1b5e20);
+                                      color:#fff; border:none;
+                                      box-shadow:0 4px 15px rgba(67,160,71,0.35);
+                                      transition:all 0.3s;">
+                                <i class="fa fa-fw fa-download me-2" role="img"/>
+                                Download Certificate
+                                <span class="badge bg-warning text-dark ms-2"
+                                      style="font-size:11px; border-radius:20px; padding:3px 10px;">
+                                    Paid
+                                </span>
+                            </a>
+
+                            <p class="text-muted mt-3" style="font-size:12px;">
+                                <i class="fa fa-lock me-1"/>
+                                Certificate download requires a one-time payment.
+                                You will be directed to checkout if not yet purchased.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </xpath>
+    </template>
+
+    <template id="slide_sidebar_done_button_inherit" inherit_id="website_slides.slide_sidebar_done_button">
+        <xpath expr="//div" position="replace">
+            <t t-set="uncompleted_icon" t-value="use_slide_icon and slide.slide_icon_class or 'fa-circle-thin'"/>
+            <div t-if="is_member"
+                class="o_wslides_sidebar_done_button align-self-start"
+                t-att-data-id="slide.id"
+                t-att-data-uncompleted-icon="uncompleted_icon"
+                t-att-data-completed="slide_completed"
+                t-att-data-can-self-mark-completed="slide.can_self_mark_completed"
+                t-att-data-can-self-mark-uncompleted="slide.can_self_mark_uncompleted"
+                t-att-data-is-member="is_member">
+                <t t-if="slide.is_sequential_locked">
+                    <span class="btn btn-sm cursor-default" title="Locked: Complete previous lessons first" style="opacity: 0.6; pointer-events: none;">
+                        <i class="fa fa-lock fa-fw fa-lg text-danger"/>
+                    </span>
+                </t>
+                <t t-else="">
+                    <button class="o_wslides_button_complete btn btn-sm" t-if="slide_completed and slide.can_self_mark_uncompleted or not slide_completed and slide.can_self_mark_completed">
+                        <i t-if="slide_completed" class="o_wslides_slide_completed fa fa-check-circle fa-fw text-success fa-lg" t-att-data-slide-id="slide.id" title="Mark as not done"/>
+                        <i t-else="" t-attf-class="fa #{uncompleted_icon} fa-fw fa-lg" t-att-data-slide-id="slide.id" title="Mark as done"/>
+                    </button>
+                    <button class="o_wslides_button_complete o_wslides_button_uncompleted btn btn-sm border-0" t-else="" disabled="1">
+                        <i t-if="slide_completed" class="o_wslides_slide_completed fa fa-check fa-fw text-success fa-lg" t-att-data-slide-id="slide.id" title="Can not be marked as not done"/>
+                        <i t-else="" t-attf-class="fa #{uncompleted_icon} fa-fw fa-lg" t-att-data-slide-id="slide.id" title="Can not be marked as done"/>
+                    </button>
+                </t>
+            </div>
+        </xpath>
+    </template>
+
+    <template id="slide_aside_training_category_inherit" inherit_id="website_slides.slide_aside_training_category">
+        <xpath expr="//t[@t-set='can_access']" position="replace">
+            <t t-set="can_access" t-value="(aside_slide.is_preview or can_access_channel) and not aside_slide.is_sequential_locked"/>
+        </xpath>
+    </template>
+
+    <template id="slide_fullscreen_sidebar_category_inherit" inherit_id="website_slides.slide_fullscreen_sidebar_category">
+        <xpath expr="//t[@t-set='can_access']" position="replace">
+            <t t-set="can_access" t-value="(can_access_channel or slide.is_preview) and not slide.is_sequential_locked"/>
+        </xpath>
+    </template>
+
+    <template id="slide_content_detailed_sequential_lock_inherit" inherit_id="website_slides.slide_content_detailed">
+        <xpath expr="//div[hasclass('d-flex', 'flex-wrap', 'align-items-start', 'my-3')]" position="before">
+            <t t-if="request.params.get('sequential_lock')">
+                <div class="alert alert-warning alert-dismissible fade show d-flex align-items-center p-3 mb-4 shadow-sm" role="alert" style="border-radius:12px; background-color: #fff9db; border: 1px solid #ffe066;">
+                    <i class="fa fa-lock text-warning me-3" style="font-size:24px;"/>
+                    <div class="text-dark">
+                        <strong style="font-weight:700;">Sequential Lesson Locked:</strong> You must complete all previous lessons before you can proceed to the next one.
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" style="padding: 1.25rem;"/>
+                </div>
+            </t>
+        </xpath>
+    </template>
+
+    <template id="course_slides_list_slide_inherit" inherit_id="website_slides.course_slides_list_slide">
+        <xpath expr="//t[@t-call='website_slides.slide_sidebar_done_button']" position="replace">
+            <t t-if="channel.can_publish">
+                <!-- Admins/Publishers get the standard interactive button -->
+                <t t-call="website_slides.slide_sidebar_done_button">
+                    <t t-set="is_member" t-value="channel.is_member"/>
+                    <t t-set="slide_completed" t-value="channel_progress[slide.id].get('completed')"/>
+                    <t t-set="use_slide_icon" t-value="False"/>
+                </t>
+            </t>
+            <t t-else="">
+                <!-- Enrolled students get non-interactive progress icons -->
+                <div class="align-self-center px-2">
+                    <t t-if="slide_completed">
+                        <i class="fa fa-check-circle text-success fa-lg" title="Completed"/>
+                    </t>
+                    <t t-elif="slide.is_sequential_locked">
+                        <i class="fa fa-lock text-danger fa-lg" title="Locked: Complete previous lessons first"/>
+                    </t>
+                    <t t-else="">
+                        <i class="fa fa-circle-thin text-400 fa-lg" title="Incomplete"/>
+                    </t>
+                </div>
+            </t>
+        </xpath>
+    </template>
+</odoo>

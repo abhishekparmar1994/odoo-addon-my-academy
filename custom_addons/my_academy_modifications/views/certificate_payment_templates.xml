@@ -1,0 +1,350 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Purpose      : QWeb templates for My Academy custom pages.
+    Templates    :
+      - certificate_payment_page : Shown when a student clicks "Download Certificate"
+                                   but hasn't paid yet. Displays price and Stripe checkout button.
+    Dependencies : website, website_sale
+-->
+<odoo>
+    <template id="certificate_payment_page" name="Academy — Certificate Payment">
+        <t t-call="website.layout">
+            <div class="container py-5">
+                <div class="row justify-content-center">
+                    <div class="col-lg-6 col-md-8 col-12">
+
+                        <!-- Header breadcrumb -->
+                        <nav aria-label="breadcrumb" class="mb-4">
+                            <ol class="breadcrumb" style="background:none; padding:0; font-size:13px;">
+                                <li class="breadcrumb-item">
+                                    <a href="/slides" class="text-muted text-decoration-none">Courses</a>
+                                </li>
+                                <li class="breadcrumb-item active text-muted" aria-current="page">
+                                    Certificate
+                                </li>
+                            </ol>
+                        </nav>
+
+                        <!-- Main payment card -->
+                        <div class="card border-0 shadow-lg"
+                             style="border-radius:20px; overflow:hidden;">
+
+                            <!-- Gradient top banner -->
+                            <div class="text-center py-5 px-4"
+                                 style="background:linear-gradient(135deg,#1a73e8 0%,#0d47a1 100%);">
+                                <div class="d-inline-flex align-items-center justify-content-center rounded-circle bg-white mb-3"
+                                     style="width:72px; height:72px; box-shadow:0 4px 20px rgba(0,0,0,0.2);">
+                                    <i class="fa fa-certificate"
+                                       style="font-size:32px; color:#1a73e8;"/>
+                                </div>
+                                <h2 class="text-white fw-bold mb-1" style="font-size:24px;">
+                                    Download Your Certificate
+                                </h2>
+                                <p class="text-white-50 mb-0" style="font-size:14px;">
+                                    One-time payment to unlock your official PDF certificate
+                                </p>
+                            </div>
+
+                            <!-- Product info -->
+                            <div class="card-body px-4 pt-4 pb-2">
+
+                                <!-- Course / product name -->
+                                <div class="d-flex align-items-center mb-4 p-3 rounded-3"
+                                     style="background:#f8f9fa; border-left:4px solid #1a73e8;">
+                                    <i class="fa fa-graduation-cap me-3"
+                                       style="font-size:22px; color:#1a73e8;"/>
+                                    <div>
+                                        <div class="fw-bold text-dark" style="font-size:15px;">
+                                            <t t-out="product.name"/>
+                                        </div>
+                                        <div class="text-muted" style="font-size:12px;">
+                                            Official completion certificate
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- What you get -->
+                                <p class="fw-semibold text-dark mb-2" style="font-size:13px; text-transform:uppercase; letter-spacing:0.5px;">
+                                    What's included
+                                </p>
+                                <ul class="list-unstyled mb-4">
+                                    <li class="d-flex align-items-center mb-2">
+                                        <span class="me-2" style="color:#43a047; font-size:16px;">✓</span>
+                                        <span class="text-muted" style="font-size:14px;">
+                                            Personalised PDF certificate with your name
+                                        </span>
+                                    </li>
+                                    <li class="d-flex align-items-center mb-2">
+                                        <span class="me-2" style="color:#43a047; font-size:16px;">✓</span>
+                                        <span class="text-muted" style="font-size:14px;">
+                                            Instant download after payment
+                                        </span>
+                                    </li>
+                                    <li class="d-flex align-items-center mb-2">
+                                        <span class="me-2" style="color:#43a047; font-size:16px;">✓</span>
+                                        <span class="text-muted" style="font-size:14px;">
+                                            Re-download anytime from your account
+                                        </span>
+                                    </li>
+                                    <li class="d-flex align-items-center">
+                                        <span class="me-2" style="color:#43a047; font-size:16px;">✓</span>
+                                        <span class="text-muted" style="font-size:14px;">
+                                            Secure payment via Stripe
+                                        </span>
+                                    </li>
+                                </ul>
+
+                                <!-- Price display -->
+                                <div class="d-flex align-items-center justify-content-between p-3 rounded-3 mb-4"
+                                     style="background:#e8f5e9; border:1px solid #c8e6c9;">
+                                    <span class="fw-semibold text-dark" style="font-size:15px;">
+                                        Total
+                                    </span>
+                                    <span class="fw-bold" style="font-size:22px; color:#2e7d32;">
+                                        <t t-out="currency.symbol or '$'"/>
+                                        <t t-esc="'%.2f' % price"/>
+                                    </span>
+                                </div>
+
+                                <!-- Pay via Stripe button (POST to add-to-cart endpoint) -->
+                                <form t-att-action="'/academy/certificate/add-to-cart/%d' % survey.id"
+                                      method="POST">
+                                    <input type="hidden" name="csrf_token"
+                                           t-att-value="request.csrf_token()"/>
+
+                                    <button type="submit" id="btn_pay_certificate"
+                                            class="btn btn-lg w-100 fw-bold mb-3"
+                                            style="border-radius:50px; font-size:16px; padding:14px;
+                                                   background:linear-gradient(135deg,#1a73e8,#0d47a1);
+                                                   color:#fff; border:none;
+                                                   box-shadow:0 4px 20px rgba(26,115,232,0.4);
+                                                   transition:all 0.3s;">
+                                        <i class="fa fa-cc-stripe me-2" style="font-size:20px;"/>
+                                        Pay with Stripe
+                                    </button>
+                                </form>
+
+                                <!-- Security note -->
+                                <div class="text-center mb-4">
+                                    <small class="text-muted">
+                                        <i class="fa fa-lock me-1" style="color:#90a4ae;"/>
+                                        Secured by Stripe. Your payment information is never stored on our servers.
+                                    </small>
+                                </div>
+
+                                <!-- Accepted cards -->
+                                <div class="d-flex justify-content-center gap-2 flex-wrap">
+                                    <span class="badge text-muted border fw-normal px-3 py-2"
+                                          style="font-size:12px; border-radius:20px; background:#f5f5f5;">
+                                        <i class="fa fa-cc-visa me-1" style="font-size:14px; color:#1a1f71;"/>
+                                        Visa
+                                    </span>
+                                    <span class="badge text-muted border fw-normal px-3 py-2"
+                                          style="font-size:12px; border-radius:20px; background:#f5f5f5;">
+                                        <i class="fa fa-cc-mastercard me-1" style="font-size:14px; color:#eb001b;"/>
+                                        Mastercard
+                                    </span>
+                                    <span class="badge text-muted border fw-normal px-3 py-2"
+                                          style="font-size:12px; border-radius:20px; background:#f5f5f5;">
+                                        <i class="fa fa-cc-amex me-1" style="font-size:14px; color:#2e77bc;"/>
+                                        Amex
+                                    </span>
+                                </div>
+                            </div>
+
+                            <!-- Footer -->
+                            <div class="text-center py-3 px-4"
+                                 style="background:#fafafa; border-top:1px solid #f0f0f0;">
+                                <small class="text-muted" style="font-size:11px;">
+                                    After payment you will be automatically redirected to download your certificate.
+                                </small>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <!--
+        Purpose   : Beautiful, user-friendly page shown when a student attempts to
+                    access the certification quiz URL directly but has incomplete lessons.
+        Variables : channel, uncompleted_lessons, slide
+    -->
+    <template id="certification_locked_page" name="Academy — Certification Locked">
+        <t t-call="website.layout">
+            <div class="container py-5">
+                <div class="row justify-content-center">
+                    <div class="col-lg-7 col-md-9 col-12">
+                        
+                        <!-- Header breadcrumb -->
+                        <nav aria-label="breadcrumb" class="mb-4">
+                            <ol class="breadcrumb" style="background:none; padding:0; font-size:13px;">
+                                <li class="breadcrumb-item">
+                                    <a t-att-href="'/slides/%d' % channel.id" class="text-muted text-decoration-none">
+                                        <t t-out="channel.name"/>
+                                    </a>
+                                </li>
+                                <li class="breadcrumb-item active text-muted" aria-current="page">
+                                    Certification Locked
+                                </li>
+                            </ol>
+                        </nav>
+
+                        <!-- Main Warning Card -->
+                        <div class="card border-0 shadow-lg" style="border-radius:20px; overflow:hidden;">
+                            
+                            <!-- Header with vibrant warning gradient -->
+                            <div class="text-center py-5 px-4" style="background:linear-gradient(135deg,#e05252 0%,#d32f2f 100%);">
+                                <div class="d-inline-flex align-items-center justify-content-center rounded-circle bg-white mb-3"
+                                     style="width:72px; height:72px; box-shadow:0 4px 20px rgba(0,0,0,0.15);">
+                                    <i class="fa fa-lock" style="font-size:32px; color:#e05252;"/>
+                                </div>
+                                <h2 class="text-white fw-bold mb-1" style="font-size:24px;">
+                                    Certification Exam Locked
+                                </h2>
+                                <p class="text-white-50 mb-0" style="font-size:14px;">
+                                    Please complete all required lessons first
+                                </p>
+                            </div>
+
+                            <!-- Body -->
+                            <div class="card-body p-4">
+                                <!-- Course Title Info -->
+                                <div class="text-center mb-4">
+                                    <h4 class="fw-bold text-dark mb-1">
+                                        <t t-out="channel.name"/>
+                                    </h4>
+                                    <p class="text-muted" style="font-size:14px;">
+                                        To earn your official completion certificate, you must finish every lesson in the curriculum first.
+                                    </p>
+                                </div>
+
+                                <!-- Validation message & remaining lessons list -->
+                                <div class="mb-4">
+                                    <p class="fw-semibold text-danger mb-2" style="font-size:13px; text-transform:uppercase; letter-spacing:0.5px;">
+                                        Remaining Lessons (<t t-out="len(uncompleted_lessons)"/>)
+                                    </p>
+                                    <div class="list-group rounded-3 border-0 shadow-sm" style="background:#fff5f5; border:1px solid #ffcdd2;">
+                                        <t t-foreach="uncompleted_lessons" t-as="ucslide">
+                                            <div class="list-group-item d-flex align-items-center justify-content-between py-3 px-4 bg-transparent border-bottom"
+                                                 style="border-color:rgba(211,47,47,0.1) !important;">
+                                                <div class="d-flex align-items-center">
+                                                    <span class="d-flex align-items-center justify-content-center rounded-circle me-3"
+                                                          style="width:28px; height:28px; background:rgba(224,82,82,0.15); color:#d32f2f;">
+                                                        <i class="fa fa-play" style="font-size:10px; margin-left:2px;"/>
+                                                    </span>
+                                                    <span class="text-dark fw-semibold" style="font-size:14px;">
+                                                        <t t-out="ucslide.name"/>
+                                                    </span>
+                                                </div>
+                                                <a t-att-href="'/slides/slide/%d' % ucslide.id"
+                                                   class="btn btn-sm px-3 shadow-sm btn-danger fw-bold"
+                                                   style="border-radius:30px; font-size:12px; padding:6px 16px;">
+                                                    Study Now <i class="fa fa-chevron-right ms-1" style="font-size:9px;"/>
+                                                </a>
+                                            </div>
+                                        </t>
+                                    </div>
+                                </div>
+
+                                <!-- Action button to return to Course Page -->
+                                <a t-att-href="'/slides/%d' % channel.id"
+                                   class="btn btn-lg w-100 fw-bold mb-3 text-white border-0"
+                                   style="border-radius:50px; font-size:16px; padding:14px;
+                                          background:#37474f;
+                                          box-shadow:0 4px 15px rgba(55,71,79,0.3);
+                                          transition:all 0.3s;">
+                                    <i class="fa fa-arrow-left me-2"/>
+                                    Return to Course Curriculum
+                                </a>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <!--
+        Purpose   : Inherit Odoo's standard certification report template to fallback
+                    to the survey creator's company or the active website company.
+                    This resolves Odoo's built-in bug where portal/anonymous guest attempts
+                    have an empty create_uid, resulting in a blank company name and logo!
+    -->
+    <template id="certification_report_view_general_inherit" inherit_id="survey.certification_report_view_general">
+        <xpath expr="//span[@class='certification-company']" position="replace">
+            <t t-set="company_to_use" t-value="user_input.survey_id.create_uid.sudo().company_id or user_input.env.company"/>
+            <span class="certification-company" t-field="company_to_use.display_name"/>
+        </xpath>
+        
+        <xpath expr="//span[@class='certification-company-logo']" position="replace">
+            <t t-set="company_to_use" t-value="user_input.survey_id.create_uid.sudo().company_id or user_input.env.company"/>
+            <span class="certification-company-logo" t-field="company_to_use.logo" t-options="{'widget': 'image'}" role="img"/>
+        </xpath>
+    </template>
+
+    <!-- Inherit payment.payment_status to display certificate download link upon payment completion -->
+    <template id="payment_status_inherit" inherit_id="payment.payment_status">
+        <xpath expr="//div[@name='o_payment_status']" position="inside">
+            <t t-if="tx and tx.state in ['done', 'authorized']">
+                <t t-set="surveys" t-value="request.env['survey.survey'].sudo().search([('certification', '=', True), ('certificate_product_id', 'in', tx.sale_order_ids.mapped('order_line.product_id').ids)])"/>
+                <t t-foreach="surveys" t-as="survey">
+                    <t t-set="attempt" t-value="request.env['survey.user_input'].sudo().search([('partner_id', '=', tx.partner_id.id), ('survey_id', '=', survey.id), ('scoring_success', '=', True)], limit=1)"/>
+                    <t t-if="attempt">
+                        <div class="card border-0 shadow-lg mt-3 mb-4" style="border-radius: 16px; overflow: hidden; background: linear-gradient(135deg, #fffcf4 0%, #f7f1e3 100%); border: 1px solid #ffeaa7;">
+                            <div class="card-body p-4 d-flex flex-column flex-md-row align-items-center justify-content-between gap-3">
+                                <div class="d-flex align-items-center gap-3">
+                                    <div class="d-flex align-items-center justify-content-center rounded-circle bg-white shadow-sm" style="width: 60px; height: 60px; min-width: 60px; border: 2px solid #e2b93c;">
+                                        <i class="fa fa-certificate text-warning" style="font-size: 28px;"/>
+                                    </div>
+                                    <div class="text-start">
+                                        <h5 class="fw-bold text-dark mb-1" style="font-family: 'Outfit', sans-serif;">Your Certificate is Ready!</h5>
+                                        <p class="text-muted mb-0 small">Congratulations! Your payment for <strong><t t-out="survey.title"/></strong> has been completed. You can now download your certificate.</p>
+                                    </div>
+                                </div>
+                                <a t-attf-href="/survey/#{survey.id}/get_certification" class="btn btn-warning text-white fw-bold px-4 py-2 shadow-sm d-flex align-items-center gap-2" style="border-radius: 30px; background: #e2b93c; border: none; font-size: 15px;">
+                                    <i class="fa fa-download"/> Download PDF
+                                </a>
+                            </div>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </xpath>
+    </template>
+
+    <!-- Inherit website_sale.confirmation to display certificate download link on the checkout confirmation page -->
+    <template id="confirmation_inherit" inherit_id="website_sale.confirmation">
+        <xpath expr="//div[@id='order_name']" position="after">
+            <t t-set="tx_sudo" t-value="order.get_portal_last_transaction()"/>
+            <t t-if="tx_sudo and tx_sudo.state in ['done', 'authorized']">
+                <t t-set="surveys" t-value="request.env['survey.survey'].sudo().search([('certification', '=', True), ('certificate_product_id', 'in', tx_sudo.sale_order_ids.mapped('order_line.product_id').ids)])"/>
+                <t t-foreach="surveys" t-as="survey">
+                    <t t-set="attempt" t-value="request.env['survey.user_input'].sudo().search([('partner_id', '=', tx_sudo.partner_id.id), ('survey_id', '=', survey.id), ('scoring_success', '=', True)], limit=1)"/>
+                    <t t-if="attempt">
+                        <div class="card border-0 shadow-lg mt-3 mb-4" style="border-radius: 16px; overflow: hidden; background: linear-gradient(135deg, #fffcf4 0%, #f7f1e3 100%); border: 1px solid #ffeaa7;">
+                            <div class="card-body p-4 d-flex flex-column flex-md-row align-items-center justify-content-between gap-3">
+                                <div class="d-flex align-items-center gap-3">
+                                    <div class="d-flex align-items-center justify-content-center rounded-circle bg-white shadow-sm" style="width: 60px; height: 60px; min-width: 60px; border: 2px solid #e2b93c;">
+                                        <i class="fa fa-certificate text-warning" style="font-size: 28px;"/>
+                                    </div>
+                                    <div class="text-start">
+                                        <h5 class="fw-bold text-dark mb-1" style="font-family: 'Outfit', sans-serif;">Your Certificate is Ready!</h5>
+                                        <p class="text-muted mb-0 small">Congratulations! Your payment for <strong><t t-out="survey.title"/></strong> has been completed. You can now download your certificate.</p>
+                                    </div>
+                                </div>
+                                <a t-attf-href="/survey/#{survey.id}/get_certification" class="btn btn-warning text-white fw-bold px-4 py-2 shadow-sm d-flex align-items-center gap-2" style="border-radius: 30px; background: #e2b93c; border: none; font-size: 15px;">
+                                    <i class="fa fa-download"/> Download PDF
+                                </a>
+                            </div>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </xpath>
+    </template>
+</odoo>

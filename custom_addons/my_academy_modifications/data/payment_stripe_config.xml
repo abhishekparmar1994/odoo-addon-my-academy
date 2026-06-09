@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Purpose : Configure the Stripe payment provider with the project's API keys
+              and set its state to 'test' mode for development.
+    Note    : noupdate="0" so the keys are applied on every module upgrade.
+-->
+<odoo noupdate="0">
+    <record id="payment.payment_provider_stripe" model="payment.provider">
+        <field name="name">Stripe</field>
+        <field name="state">test</field>
+        <field name="stripe_publishable_key">pk_test_your_publishable_key</field>
+        <field name="stripe_secret_key">sk_test_your_secret_key</field>
+        <field name="is_published">True</field>
+    </record>
+</odoo>

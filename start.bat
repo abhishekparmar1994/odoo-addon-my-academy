@@ -1,0 +1,6 @@
+@echo off
+echo Adding wkhtmltopdf to system PATH...
+set PATH=%PATH%;C:\Program Files\wkhtmltopdf\bin
+
+echo Starting Odoo Server in Development Mode...
+venv\Scripts\python.exe server\odoo-bin -c odoo.conf -d odoo --dev=all

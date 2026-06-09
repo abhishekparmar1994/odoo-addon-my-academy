@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+        <!-- SharePoint Course -->
+        <record id="course_sharepoint_2010" model="slide.channel">
+            <field name="name">Microsoft Office SharePoint Server 2010: The Complete Guide</field>
+            <field name="description">Master the core features of SharePoint 2010, including document management, social features, and enterprise search. This course provides a deep dive into architecture and site administration.</field>
+            <field name="website_published">True</field>
+            <field name="channel_type">training</field>
+            <field name="enroll">public</field>
+        </record>
+
+        <!-- Session 1 -->
+        <record id="slide_sharepoint_session_1" model="slide.slide">
+            <field name="name">Session 1: Introduction to SharePoint 2010 Architecture</field>
+            <field name="channel_id" ref="course_sharepoint_2010"/>
+            <field name="slide_category">video</field>
+            <field name="url">https://player.vimeo.com/video/540472450</field>
+            <field name="is_published">True</field>
+            <field name="completion_time">1.5</field>
+        </record>
+
+        <!-- Session 2 -->
+        <record id="slide_sharepoint_session_2" model="slide.slide">
+            <field name="name">Session 2: Content Management and Social Integration</field>
+            <field name="channel_id" ref="course_sharepoint_2010"/>
+            <field name="slide_category">video</field>
+            <field name="url">https://player.vimeo.com/video/540472488</field>
+            <field name="is_published">True</field>
+            <field name="completion_time">2.0</field>
+        </record>
+
+        <!-- Session 3 -->
+        <record id="slide_sharepoint_session_3" model="slide.slide">
+            <field name="name">Session 3: Enterprise Search and Optimization</field>
+            <field name="channel_id" ref="course_sharepoint_2010"/>
+            <field name="slide_category">video</field>
+            <field name="url">https://player.vimeo.com/video/540472539</field>
+            <field name="is_published">True</field>
+            <field name="completion_time">1.0</field>
+        </record>
+        
+        <!-- SharePoint 2010 Certification Survey -->
+        <record id="survey_sharepoint_2010_certification" model="survey.survey">
+            <field name="title">SharePoint 2010 Certification Quiz</field>
+            <field name="access_token">5ead4bc8-b8f2-4760-a682-1fde8ddb95ab</field>
+            <field name="user_id" ref="base.user_admin"/>
+            <field name="access_mode">public</field>
+            <field name="questions_layout">page_per_question</field>
+            <field name="users_can_go_back" eval="True"/>
+            <field name="users_login_required" eval="True"/>
+            <field name="scoring_type">scoring_with_answers</field>
+            <field name="scoring_success_min">80</field>
+            <field name="certification" eval="True"/>
+            <field name="certification_mail_template_id" ref="survey.mail_template_certification"/>
+            <field name="description" type="html">
+                <p>Complete this certification to prove your expertise in SharePoint 2010!</p>
+            </field>
+        </record>
+
+        <!-- Page 1 of Certification Survey -->
+        <record id="survey_sharepoint_page_1" model="survey.question">
+            <field name="title">SharePoint 2010 Fundamentals</field>
+            <field name="survey_id" ref="survey_sharepoint_2010_certification"/>
+            <field name="sequence">1</field>
+            <field name="is_page" eval="True"/>
+            <field name="question_type" eval="False"/>
+        </record>
+
+        <!-- Question 1: Architecture -->
+        <record id="survey_sharepoint_q1" model="survey.question">
+            <field name="survey_id" ref="survey_sharepoint_2010_certification"/>
+            <field name="sequence">2</field>
+            <field name="title">What is the primary database technology used to store content in SharePoint 2010?</field>
+            <field name="question_type">simple_choice</field>
+            <field name="constr_mandatory" eval="True"/>
+        </record>
+        <record id="survey_sharepoint_q1_choice_1" model="survey.question.answer">
+            <field name="question_id" ref="survey_sharepoint_q1"/>
+            <field name="sequence">1</field>
+            <field name="value">Microsoft SQL Server</field>
+            <field name="is_correct" eval="True"/>
+            <field name="answer_score">5.0</field>
+        </record>
+        <record id="survey_sharepoint_q1_choice_2" model="survey.question.answer">
+            <field name="question_id" ref="survey_sharepoint_q1"/>
+            <field name="sequence">2</field>
+            <field name="value">MongoDB</field>
+        </record>
+        <record id="survey_sharepoint_q1_choice_3" model="survey.question.answer">
+            <field name="question_id" ref="survey_sharepoint_q1"/>
+            <field name="sequence">3</field>
+            <field name="value">MySQL</field>
+        </record>
+
+        <!-- Question 2: FAST Search -->
+        <record id="survey_sharepoint_q2" model="survey.question">
+            <field name="survey_id" ref="survey_sharepoint_2010_certification"/>
+            <field name="sequence">3</field>
+            <field name="title">Which search engine is integrated into SharePoint 2010 for advanced querying capabilities?</field>
+            <field name="question_type">simple_choice</field>
+            <field name="constr_mandatory" eval="True"/>
+        </record>
+        <record id="survey_sharepoint_q2_choice_1" model="survey.question.answer">
+            <field name="question_id" ref="survey_sharepoint_q2"/>
+            <field name="sequence">1</field>
+            <field name="value">FAST Search</field>
+            <field name="is_correct" eval="True"/>
+            <field name="answer_score">5.0</field>
+        </record>
+        <record id="survey_sharepoint_q2_choice_2" model="survey.question.answer">
+            <field name="question_id" ref="survey_sharepoint_q2"/>
+            <field name="sequence">2</field>
+            <field name="value">Elasticsearch</field>
+        </record>
+        <record id="survey_sharepoint_q2_choice_3" model="survey.question.answer">
+            <field name="question_id" ref="survey_sharepoint_q2"/>
+            <field name="sequence">3</field>
+            <field name="value">Apache Solr</field>
+        </record>
+
+        <!-- Certification Slide -->
+        <record id="slide_sharepoint_certification" model="slide.slide">
+            <field name="name">SharePoint 2010 Official Certification</field>
+            <field name="channel_id" ref="course_sharepoint_2010"/>
+            <field name="slide_category">certification</field>
+            <field name="survey_id" ref="survey_sharepoint_2010_certification"/>
+            <field name="is_published">True</field>
+            <field name="completion_time">1.0</field>
+        </record>
+
+        <!-- SharePoint Certificate Product — purchased to unlock certificate download -->
+        <record id="product_sharepoint_certificate" model="product.template">
+            <field name="name">SharePoint 2010 Certificate</field>
+            <field name="type">service</field>
+            <field name="list_price">49.00</field>
+            <field name="description_sale">Official completion certificate for the SharePoint 2010 course. Purchase to download your PDF certificate.</field>
+            <field name="website_published">True</field>
+        </record>
+
+        <!-- Link the SharePoint certificate product to its survey -->
+        <record id="survey_sharepoint_2010_certification" model="survey.survey">
+            <field name="certificate_product_id"
+                   eval="ref('product_sharepoint_certificate')"
+            />
+        </record>
+
+        <!-- Generic fallback certificate product for all other courses (e.g. English, demo courses) -->
+        <record id="product_generic_certificate" model="product.template">
+            <field name="name">Course Completion Certificate</field>
+            <field name="type">service</field>
+            <field name="list_price">29.00</field>
+            <field name="description_sale">Official completion certificate. Purchase once to permanently unlock your PDF certificate download.</field>
+            <field name="website_published">True</field>
+            <field name="sale_ok">True</field>
+        </record>
+
+        <!-- Auto-link the generic product to ALL certification surveys that have no product set yet.
+             This covers Odoo built-in demo courses (English, etc.) without hardcoding their IDs. -->
+        <function model="survey.survey" name="_assign_missing_certificate_products">
+            <value eval="ref('my_academy_modifications.product_generic_certificate')"/>
+        </function>
+
+        <!-- COURSE20 Promo Code Program -->
+        <record id="course20_promo_program" model="loyalty.program">
+            <field name="name">COURSE20 - 20% Off (Min $20)</field>
+            <field name="program_type">promo_code</field>
+            <field name="trigger">with_code</field>
+            <field name="applies_on">current</field>
+            <field name="portal_visible">True</field>
+            <field name="portal_point_name">Discount point(s)</field>
+        </record>
+
+        <record id="course20_promo_program_rule" model="loyalty.rule">
+            <field name="program_id" ref="course20_promo_program"/>
+            <field name="code">COURSE20</field>
+            <field name="minimum_amount">20.00</field>
+            <field name="minimum_amount_tax_mode">incl</field>
+        </record>
+
+        <record id="course20_promo_program_reward" model="loyalty.reward">
+            <field name="program_id" ref="course20_promo_program"/>
+            <field name="reward_type">discount</field>
+            <field name="discount">20</field>
+            <field name="discount_mode">percent</field>
+            <field name="discount_applicability">order</field>
+        </record>
+
+        <!-- Course 20% Discount Coupons Program -->
+        <record id="course_20_coupons_program" model="loyalty.program">
+            <field name="name">Course 20% Discount Coupons</field>
+            <field name="program_type">coupons</field>
+            <field name="trigger">with_code</field>
+            <field name="applies_on">current</field>
+            <field name="portal_visible">True</field>
+            <field name="portal_point_name">Coupon points</field>
+        </record>
+
+        <record id="course_20_coupons_program_rule" model="loyalty.rule">
+            <field name="program_id" ref="course_20_coupons_program"/>
+            <field name="reward_point_amount">1.0</field>
+            <field name="reward_point_mode">unit</field>
+        </record>
+
+        <record id="course_20_coupons_program_reward" model="loyalty.reward">
+            <field name="program_id" ref="course_20_coupons_program"/>
+            <field name="reward_type">discount</field>
+            <field name="discount">20</field>
+            <field name="discount_mode">percent</field>
+            <field name="discount_applicability">order</field>
+            <field name="required_points">1.0</field>
+        </record>
+    </data>
+</odoo>
