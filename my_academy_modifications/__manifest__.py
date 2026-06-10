@@ -13,7 +13,6 @@
         'payment_stripe',
         'loyalty',
         'mail',
-        'website_sale_earn',
         'account',
     ],
     'data': [
