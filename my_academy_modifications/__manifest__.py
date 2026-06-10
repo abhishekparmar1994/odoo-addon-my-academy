@@ -11,6 +11,10 @@
         'sale',
         'website_sale_slides',
         'payment_stripe',
+        'loyalty',
+        'mail',
+        'website_sale_earn',
+        'account',
     ],
     'data': [
         'data/course_data.xml',
